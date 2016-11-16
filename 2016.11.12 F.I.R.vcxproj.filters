@@ -18,5 +18,22 @@
     <ClCompile Include="main.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="menu.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="game_service.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="menu.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="game_service.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

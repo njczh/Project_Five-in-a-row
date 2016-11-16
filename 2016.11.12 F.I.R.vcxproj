@@ -147,7 +147,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="game_service.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="menu.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game_service.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
