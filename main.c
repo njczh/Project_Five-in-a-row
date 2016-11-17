@@ -56,7 +56,7 @@ int main(void)
 			PlayGame();
 			break;
 
-		case 2:// 加载棋局
+		case 2:// 加载棋局 
 			printf("\t\t加载棋局");
 			break;
 
@@ -76,8 +76,8 @@ int main(void)
 			printf("\t\t输入有误，请确认选项！");
 
 		}
-		printf("\n\t\t按任意键继续！");
-		_getch();
+		gotoxy(17,12);
+		system("pause");
 	} while (nSelect != 0);
 
 	exitApplication();
