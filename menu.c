@@ -14,12 +14,13 @@ int printMainMenu()
 
 	// 获得用户的输入
 	scanf_s("%d", &nSelect);
-	getchar();
-
+	
 	// 清除输入流缓存
-	fflush(stdin);
+	char s[1024];
+	fgets(s, 1024, stdin);
+	// fflush(stdin);
 
 	// 返回用户选择的菜单项序号
 	return nSelect;
-	
+
 }

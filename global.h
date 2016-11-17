@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
@@ -11,6 +9,13 @@
 #define CHESS_BLACK "●"		// 黑子图标
 #define CHESS_WHITE "○"		// 白子图标
 
+#define JUDGE_WIN 1			// 判断胜利
+#define JUDGE_DRAW 0		// 判断平局
+#define JUDGE_CONTINUE -1		// 判断游戏继续
+
+
+
 #define MAX 15
+#define NUMBER_WIN 5
 
 #endif // #ifndef _GLOBAL_H_

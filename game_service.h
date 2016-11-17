@@ -63,4 +63,45 @@ void PrintChess();
 ****************************************************/
 void PlayGame();
 
+/****************************************************
+[函数名称] JudgeDraw
+[函数功能] 判断是否和棋
+[函数参数] 无
+[返 回 值] int :TRUE(1) 表示和棋 
+				FALSE(0)表示可以继续
+****************************************************/
+int JudgeDraw();
+
+/****************************************************
+[函数名称] JudgeGame
+[函数功能] 判断输赢
+[函数参数] const int : 落子的横坐标 
+		   const int : 落子的纵坐标
+[返 回 值] int : JUDGE_WIN 某一方胜利，游戏结束
+				 JUDGE_DRAW 棋盘已满，和局
+				 JUDGE_CONTINUE 没有结束，游戏继续
+****************************************************/
+int JudgeGame(const int, const int);
+int JudgeHorizontal(const nRow,const nCol,const int nStandard);
+int JudgeVertical(const nRow, const nCol, const int nStandard);
+int JudgeHyperphoria(const nRow, const nCol, const int nStandard);
+int JudgeHypophoria(const nRow, const nCol, const int nStandard);
+
+
+/****************************************************
+[函数名称] PrintWinner
+[函数功能] 输出获胜信息
+[函数参数] const int : 胜利一方信息
+[返 回 值] void
+****************************************************/
+void PrintWinner(const int);
+
+/****************************************************
+[函数名称] PrintDraw
+[函数功能] 输出和棋信息
+[函数参数] 无
+[返 回 值] void
+****************************************************/
+void PrintDraw();
+
 ///////////////////////////////////////////////////////
