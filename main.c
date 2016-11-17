@@ -46,6 +46,7 @@ int main(void)
 		intiApplication();
 
 		nSelect = printMainMenu();
+		gotoxy(20,20);
 		switch (nSelect)
 		{
 		case 0:// 退出
@@ -76,7 +77,7 @@ int main(void)
 			printf("\t\t输入有误，请确认选项！");
 
 		}
-		gotoxy(17,12);
+		gotoxy(17,22);
 		system("pause");
 	} while (nSelect != 0);
 
