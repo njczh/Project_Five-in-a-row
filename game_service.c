@@ -1,6 +1,4 @@
 #include "game_service.h"
-#include "global.h"
-#include <windows.h>
 
 int AnChessStatus[MAX][MAX];
 
@@ -18,22 +16,22 @@ void InitStatus()
 	int i, j;
 
 	// 初始化状态值，使用双循环遍历二维数组
-	for (i = 0; i < 15; i++)
-		for (j = 0; j < 15; j++)
+	for (i = 0; i < MAX; i++)
+		for (j = 0; j < MAX; j++)
 			AnChessStatus[i][j] = STATUS_BLANK;
 }
 
-int GetStatus(const int nRow, const int nCol)
+int GetStatus(const Point point)
 {
-	return AnChessStatus[nRow][nCol];
+	return AnChessStatus[point.row][point.col];
 }
 
-void SetStatus(const int nRow, const int nCol,int nStatus)
+void SetStatus(const Point point)
 {
-	AnChessStatus[nRow][nCol] = nStatus;
+	AnChessStatus[point.row][point.col] = point.status;
 }
 
-void InputPoint(int * pnRow, int * pnCol, const int nColor)
+void InputPoint(Point* point)
 {
 	char acPoint[8];					// 用来获得用户输入
 	int nStatus = STATUS_BLANK;			// 坐标状态，初始化为空
@@ -45,12 +43,12 @@ void InputPoint(int * pnRow, int * pnCol, const int nColor)
 		//以此标识，提示用户的输入
 		printf("==========================================\n");
 		//根据执子方，提示用户输入坐标
-		if (nColor == 0)					// 黑方执子
+		if (point->status == 0)					// 黑方执子
 		{
 			gotoxy(20, 25);
 			printf("黑子●下，请输入坐标编号（如：A1）：");
 		}
-		else if (nColor == 1)				// 白方执子
+		else if (point->status == 1)				// 白方执子
 		{
 			gotoxy(20, 25);
 			printf("白子○下，请输入坐标编号（如：A1）：");
@@ -60,11 +58,11 @@ void InputPoint(int * pnRow, int * pnCol, const int nColor)
 		//getchar();
 		fgets(acPoint, 8, stdin);
 
-		*pnCol = toupper(acPoint[0]) - 'A';	// 将字符转换为大写英文字母,对应二维数组的第一个下标为0
-		*pnRow = atoi(&acPoint[1]) - 1;		// 字符串的第二个字母后为数字，使用atoi函数进行转换
+		point->col = toupper(acPoint[0]) - 'A';	// 将字符转换为大写英文字母,对应二维数组的第一个下标为0
+		point->row = atoi(&acPoint[1]) - 1;		// 字符串的第二个字母后为数字，使用atoi函数进行转换
 
 		// 判断输入的行号和列号是否有效
-		if (*pnRow < 0 || *pnRow>MAX-1 || *pnCol < 0 || *pnCol >MAX-1)
+		if (point->row < 0 || point->row>MAX-1 || point->col < 0 || point->col >MAX-1)
 		{
 			legal = 0;						// 非法输入
 			gotoxy(32, 26);
@@ -75,7 +73,7 @@ void InputPoint(int * pnRow, int * pnCol, const int nColor)
 		}
 
 		// 获得坐标点的状态值
-		nStatus = GetStatus(*pnRow, *pnCol);
+		nStatus = GetStatus(*point);
 
 		//判断状态
 		if (nStatus != STATUS_BLANK)		// 当状态不为空是，不可落子
@@ -85,7 +83,7 @@ void InputPoint(int * pnRow, int * pnCol, const int nColor)
 			gotoxy(32, 26);
 			printf("【落子失败】");
 			gotoxy(26, 27);
-			printf("%02d行%c列已有棋子！不可落子！\n", *pnCol+1, *pnRow+'A');
+			printf("%02d行%c列已有棋子！不可落子！\n", point->col +1, point->row +'A');
 			continue;
 		}
 
@@ -142,6 +140,7 @@ void PrintChess()
 {
 	int nStatus;
 	int i;
+	Point point;
 
 	system("cls");
 
@@ -169,9 +168,11 @@ void PrintChess()
 				printf("\t\t  %02d┣", row + 1);
 				continue;
 			}
+			point.col = line;
+			point.row = row;
 
 			// 获得坐标状态
-			nStatus = GetStatus(row, line);
+			nStatus = GetStatus(point);
 			// 根据不同的状态值，绘制不同的图标
 			
 			if (nStatus == STATUS_BLANK)// 此处为空
@@ -204,57 +205,6 @@ void PrintChess()
 	printf("\n");
 }
 
-void PlayGame()
-{
-	int nRow = -1;						// 行索引号
-	int nCol = -1;						// 列索引号
-	int nStep = 0;						// 下子的步数
-	int nResult;
-
-	// 初始化游戏数据
-	InitStatus();
-
-	// 绘制棋盘
-	PrintChess();
-	//PrintBound();
-
-	// 输出开始提示
-	PrintPrompt();
-
-	// 绘制棋盘
-	PrintChess();
-	//PrintBound();
-
-
-	//开始下棋，使用do…while至少先落一子，再进行检查是否获胜
-	do {
-		// 获得用户下子坐标
-		InputPoint(&nRow, &nCol, nStep % 2);
-
-		// 设置坐标点状态
-		SetStatus(nRow, nCol, nStep % 2);
-
-		// 更新棋盘
-		PrintChess();
-
-		//步数增加
-		nStep++;
-
-		// 判断棋局
-		nResult = JudgeGame(nRow, nCol);
-	} while (nResult == JUDGE_CONTINUE);	// 循环落子，当获胜时，则结束循环
-
-	if (nResult == JUDGE_WIN)
-	{
-		PrintWinner((nStep - 1) % 2);	// 输出胜利信息
-	}
-	else if (nResult == JUDGE_DRAW)		// 输出和棋信息
-	{
-		PrintDraw();
-	}
-	
-}
-
 int JudgeDraw()
 {
 	int i, j;
@@ -266,32 +216,32 @@ int JudgeDraw()
 	return 0;
 }
 
-int JudgeGame(const int nRow, const int nCol)
+int JudgeGame(Point point)
 {
 	// 优先判断是否得胜
 	// 计数器，用来记录连续相同的棋子数
 	int nCount;	
 
 	// 获取落子的标准状态,用于判断
-	const int STANDARD = AnChessStatus[nRow][nCol];
+	point.status = AnChessStatus[point.row][point.col];
 
 	// 横向判断
-	nCount = JudgeHorizontal(nRow, nCol, STANDARD);
+	nCount = JudgeHorizontal(point);
 	if (nCount >= NUMBER_WIN)
 		return JUDGE_WIN;
 
 	// 纵向判断
-	nCount = JudgeVertical(nRow, nCol, STANDARD);
+	nCount = JudgeVertical(point);
 	if (nCount >= NUMBER_WIN)
 		return JUDGE_WIN;
 
 	// 对角线判断I（从左下到右上）
-	nCount = JudgeHyperphoria(nRow, nCol, STANDARD);
+	nCount = JudgeHyperphoria(point);
 	if (nCount >= NUMBER_WIN)
 		return JUDGE_WIN;
 
 	// 对角线判断II（从左上到右下）
-	nCount = JudgeHypophoria(nRow, nCol, STANDARD);
+	nCount = JudgeHypophoria(point);
 	if (nCount >= NUMBER_WIN)
 		return JUDGE_WIN;
 
@@ -304,14 +254,15 @@ int JudgeGame(const int nRow, const int nCol)
 	return JUDGE_CONTINUE;
 }
 
-int JudgeHorizontal(const nRow, const nCol, const int nStandard)
+int JudgeHorizontal(const Point point)
 {
 	int i, j;
 	int counter = 1;		// 计数同色相连棋子数
-	j = nCol;
+	int nStandard = point.status;
+	j = point.col;
 
 	//纵向(向上)
-	i = nRow-1;
+	i = point.row-1;
 	while (i >= 0)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -324,7 +275,7 @@ int JudgeHorizontal(const nRow, const nCol, const int nStandard)
 	}
 
 	//纵向（向下）
-	i = nRow + 1;
+	i = point.row + 1;
 	while (i < MAX)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -339,14 +290,15 @@ int JudgeHorizontal(const nRow, const nCol, const int nStandard)
 	return counter;
 }
 
-int JudgeVertical(const nRow, const nCol, const int nStandard)
+int JudgeVertical(const Point point)
 {
 	int i, j;
 	int counter = 1;		// 计数同色相连棋子数
-	i = nRow;
+	int nStandard = point.status;
+	i = point.row;
 
 	//横向(向左)
-	j = nCol - 1;
+	j = point.col - 1;
 	while (j >= 0)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -359,7 +311,7 @@ int JudgeVertical(const nRow, const nCol, const int nStandard)
 	}
 
 	//横向（向右）
-	j = nCol + 1;
+	j = point.col + 1;
 	while (j < MAX)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -374,16 +326,17 @@ int JudgeVertical(const nRow, const nCol, const int nStandard)
 	return counter;
 }
 
-int JudgeHyperphoria(const nRow, const nCol, const int nStandard)
+int JudgeHyperphoria(const Point point)
 {
 
 	int i, j;
 	int counter = 1;		// 计数同色相连棋子数
-	
+	int nStandard = point.status;
+
 
 	//对角线(↙向左下)
-	i = nRow - 1;
-	j = nCol + 1;
+	i = point.row - 1;
+	j = point.col + 1;
 	while (j < MAX&&i >= 0)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -397,8 +350,8 @@ int JudgeHyperphoria(const nRow, const nCol, const int nStandard)
 	}
 
 	//对角线(↗向右上)
-	i = nRow + 1;
-	j = nCol - 1;
+	i = point.row + 1;
+	j = point.col - 1;
 	while (j >= 0 && i < MAX)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -414,16 +367,17 @@ int JudgeHyperphoria(const nRow, const nCol, const int nStandard)
 	return counter;
 }
 
-int JudgeHypophoria(const nRow, const nCol, const int nStandard)
+int JudgeHypophoria(const Point point)
 {
 
 	int i, j;
 	int counter = 1;		// 计数同色相连棋子数
+	int nStandard = point.status;
 
 
 	//对角线(↖向左上)
-	i = nRow - 1;
-	j = nCol - 1;
+	i = point.row - 1;
+	j = point.col - 1;
 	while (j >= 0 && i >= 0)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -437,8 +391,8 @@ int JudgeHypophoria(const nRow, const nCol, const int nStandard)
 	}
 
 	//对角线(↘向右下)
-	i = nRow + 1;
-	j = nCol + 1;
+	i = point.row + 1;
+	j = point.col + 1;
 	while (i < MAX&&j < MAX)
 	{
 		if (AnChessStatus[i][j] == nStandard)
@@ -454,9 +408,9 @@ int JudgeHypophoria(const nRow, const nCol, const int nStandard)
 	return counter;
 }
 
-void PrintWinner(const int nColor)
+void PrintWinner(const Point point)
 {
-	if (nColor == 0)					// 表示黑棋胜
+	if (point.status == 0)					// 表示黑棋胜
 	{
 		gotoxy(28, 12);
 		printf("╔════════╗");
@@ -464,10 +418,8 @@ void PrintWinner(const int nColor)
 		printf("║●恭喜黑棋获胜●║");
 		gotoxy(28, 14);
 		printf("╚════════╝");
-		gotoxy(26, 24);
-
 	}
-	else if (nColor == 1)				// 表示白棋胜
+	else if (point.status == 1)				// 表示白棋胜
 	{
 		gotoxy(28, 12);
 		printf("╔════════╗");
@@ -475,10 +427,9 @@ void PrintWinner(const int nColor)
 		printf("║○恭喜白棋获胜○║");
 		gotoxy(28, 14);
 		printf("╚════════╝");
-		gotoxy(26, 24);
-
 	}
-
+	gotoxy(24, 24);
+	system("pause");
 }
 
 void PrintDraw()
@@ -489,6 +440,7 @@ void PrintDraw()
 	printf("║  ●○和棋○●  ║");
 	gotoxy(28, 14);
 	printf("╚════════╝");
-	gotoxy(26, 27);
+	gotoxy(24, 24);
+	system("pause");
 }
 

@@ -4,32 +4,7 @@
 #include <Windows.h>
 #include <conio.h>
 #include "menu.h"
-#include "game_service.h"
 
-#define MAX 15
-
-void intiApplication()
-{
-	//输出欢迎界面
-	system("cls");
-	printf("\n\t\t\t ┏━━━━━━━━━┓\n");
-	printf("\t\t\t ┃欢迎进入五子棋游戏┃\n");
-	printf("\t\t\t ┗━━━━━━━━━┛\n");
-}
-
-void exitApplication()
-{
-	// 退出
-	for (int i = 5; i != 0; i--)
-	{
-		system("cls");
-		printf("\n\t\t\t┏━━━━━━━━━┓\n");
-		printf("\t\t\t┃     感谢使用!    ┃\n");
-		printf("\t\t\t┃    (%d秒后退出)   ┃\n", i);
-		printf("\t\t\t┗━━━━━━━━━┛\n");
-		Sleep(1000);
-	}
-}
 
 /****************************************************
 [函数名称] main
@@ -46,9 +21,10 @@ int main(void)
 		intiApplication();
 
 		nSelect = printMainMenu();
-		gotoxy(20,20);
+
 		switch (nSelect)
 		{
+
 		case 0:// 退出
 			continue;
 
@@ -66,19 +42,17 @@ int main(void)
 			break;
 
 		case 4:// 查看规则
-			printf("\t\t查看规则");
+			PrintGameRule();
 			break;
 
 		case 5:// 关于我们
-			printf("\t\t关于我们");
+			PrintAboutUs();
 			break;
 
 		default:
 			printf("\t\t输入有误，请确认选项！");
-
 		}
-		gotoxy(17,22);
-		system("pause");
+
 	} while (nSelect != 0);
 
 	exitApplication();

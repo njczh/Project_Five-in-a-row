@@ -11,11 +11,9 @@
 
 #define JUDGE_WIN 1			// 判断胜利
 #define JUDGE_DRAW 0		// 判断平局
-#define JUDGE_CONTINUE -1		// 判断游戏继续
+#define JUDGE_CONTINUE -1	// 判断游戏继续
 
-
-
-#define MAX 15
-#define NUMBER_WIN 5
+#define MAX 15				// 棋盘大小
+#define NUMBER_WIN 5		// 连续多少个棋子为胜
 
 #endif // #ifndef _GLOBAL_H_

@@ -1,6 +1,10 @@
 #pragma once
 #include <conio.h>
 #include <stdio.h> 
+#include <windows.h>
+#include "model.h"
+#include "global.h"
+
 
 ///////////////////////////////////////////////////////
 // 函数声明
@@ -21,7 +25,7 @@ void InitStatus();
 [函数参数] 横坐标与纵坐标
 [返 回 值] 返回该坐标的状态
 ****************************************************/
-int GetStatus(const int, const int);
+int GetStatus(const Point);
 
 /****************************************************
 [函数名称] SetStatus
@@ -29,7 +33,7 @@ int GetStatus(const int, const int);
 [函数参数] 横坐标、纵坐标与待修改的状态值
 [返 回 值] 无
 ****************************************************/
-void SetStatus(const int, const int, int);
+void SetStatus(const Point);
 
 /****************************************************
 [函数名称] inputPoint
@@ -37,7 +41,7 @@ void SetStatus(const int, const int, int);
 [函数参数] 横坐标、纵坐标与待修改的状态值
 [返 回 值] 无
 ****************************************************/
-void InputPoint(int *pnRow, int *pnCol,const int nColor);
+void InputPoint(Point*);
 
 /****************************************************
 [函数名称] PrintPrompt
@@ -56,14 +60,6 @@ void PrintPrompt();
 void PrintChess();
 
 /****************************************************
-[函数名称] PlayGame
-[函数功能] 开始游戏
-[函数参数] 无
-[返 回 值] 无
-****************************************************/
-void PlayGame();
-
-/****************************************************
 [函数名称] JudgeDraw
 [函数功能] 判断是否和棋
 [函数参数] 无
@@ -75,17 +71,16 @@ int JudgeDraw();
 /****************************************************
 [函数名称] JudgeGame
 [函数功能] 判断输赢
-[函数参数] const int : 落子的横坐标 
-		   const int : 落子的纵坐标
+[函数参数] const Point :
 [返 回 值] int : JUDGE_WIN 某一方胜利，游戏结束
 				 JUDGE_DRAW 棋盘已满，和局
 				 JUDGE_CONTINUE 没有结束，游戏继续
 ****************************************************/
-int JudgeGame(const int, const int);
-int JudgeHorizontal(const nRow,const nCol,const int nStandard);
-int JudgeVertical(const nRow, const nCol, const int nStandard);
-int JudgeHyperphoria(const nRow, const nCol, const int nStandard);
-int JudgeHypophoria(const nRow, const nCol, const int nStandard);
+int JudgeGame(Point point);
+int JudgeHorizontal(const Point point);
+int JudgeVertical(const Point point);
+int JudgeHyperphoria(const Point point);
+int JudgeHypophoria(const Point point);
 
 
 /****************************************************
@@ -94,7 +89,7 @@ int JudgeHypophoria(const nRow, const nCol, const int nStandard);
 [函数参数] const int : 胜利一方信息
 [返 回 值] void
 ****************************************************/
-void PrintWinner(const int);
+void PrintWinner(const Point point);
 
 /****************************************************
 [函数名称] PrintDraw

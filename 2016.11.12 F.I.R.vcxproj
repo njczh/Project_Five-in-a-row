@@ -155,6 +155,7 @@
     <ClInclude Include="game_service.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="model.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
