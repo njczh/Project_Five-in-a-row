@@ -28,24 +28,37 @@ int main(void)
 		case 0:// 退出
 			continue;
 
-		case 1:// 开始游戏
+		case 1:// 多人模式
 			system("cls");
 			PlayGame();
 			break;
 
-		case 2:// 加载棋局 
-			printf("\t\t加载棋局");
+		case 2:// 单人模式
+			gotoxy(33, 25);
+			printf("人机对战\n");
+			gotoxy(24, 27);
+			system("pause");
 			break;
 
-		case 3:// 排行榜
-			printf("\t\t排行榜");
+		case 3:// 加载棋局 
+			gotoxy(33, 25);
+			printf("加载棋局\n");
+			gotoxy(24, 27);
+			system("pause");
 			break;
 
-		case 4:// 查看规则
+		case 4:// 排行榜
+			gotoxy(33, 25);
+			printf("分数排行\n");
+			gotoxy(24, 27);
+			system("pause");
+			break;
+
+		case 5:// 查看规则
 			PrintGameRule();
 			break;
 
-		case 5:// 关于我们
+		case 6:// 关于我们
 			PrintAboutUs();
 			break;
 

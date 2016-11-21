@@ -62,13 +62,13 @@ void GetInput(int *nSelect)
 				if ((*nSelect) == 1)
 				{
 					(*nSelect) = OPTIONS;
-					coord.Y += OPTIONS-1;
+					coord.Y += 2 * (OPTIONS - 1);
 
 				}
 				else
 				{
 					(*nSelect)--;
-					coord.Y--;
+					coord.Y-=2;
 
 				}
 			}
@@ -77,12 +77,12 @@ void GetInput(int *nSelect)
 			{
 				if ((*nSelect) == OPTIONS)
 				{
-					coord.Y -= OPTIONS-1;
+					coord.Y -= 2 * (OPTIONS - 1);
 					(*nSelect) = 1;
 				}
 				else
 				{
-					coord.Y++;
+					coord.Y+=2;
 					(*nSelect)++;
 				}
 			}
@@ -107,13 +107,13 @@ int printMainMenu()
 {
 	int nSelect = 1; // 默认为1
 
-	printf("\n");
-	printf("\t\t========================================\n\n");
-	printf("\t\t\t        NEW GAME\n");
-	printf("\t\t\t        加载棋局\n");
-	printf("\t\t\t        分数排行\n");
-	printf("\t\t\t        查看规则\n");
-	printf("\t\t\t        关于我们\n");
+	printf("\n\t\t========================================\n\n");
+	printf("\t\t\t        人人对战\n\n");
+	printf("\t\t\t        人机对战\n\n");
+	printf("\t\t\t        加载棋局\n\n");
+	printf("\t\t\t        分数排行\n\n");
+	printf("\t\t\t        查看规则\n\n");
+	printf("\t\t\t        关于我们\n\n");
 	printf("\t\t\t        退出游戏\n");
 	printf("\n\t\t----------------------------------------\n");
 	printf("\t\t请使用↑↓键选择功能，按回车键确认！");
@@ -122,10 +122,12 @@ int printMainMenu()
 	printf("○");
 	gotoxy(30,8);
 	printf("●");
-	hout = GetStdHandle(STD_OUTPUT_HANDLE);					 //获得标准输出设备句柄  
-	CONSOLE_CURSOR_INFO cursor_info = { 1,0 };
+	hout = GetStdHandle(STD_OUTPUT_HANDLE);					 // 获得标准输出设备句柄  
+
+	CONSOLE_CURSOR_INFO cursor_info = { 1,0 };				 // 隐藏光标
 	SetConsoleCursorInfo(hout, &cursor_info);
-	GetInput(&nSelect); 
+
+	GetInput(&nSelect);
 	nSelect = nSelect % OPTIONS;
 	
 	/*
@@ -168,8 +170,23 @@ void PlayGame()
 	do {
 
 		spPoint.status = nStep % 2;
-		// 获得用户下子坐标
-		InputPoint(&spPoint);
+
+		// 使用方向键获得用户下子坐标
+		// == 0 表示玩家选择退出游戏
+		switch (InputCoord(&spPoint))
+		{
+		case 1:
+			break;
+		case 0:
+			return;
+			break;
+		case -1:
+			PrintChess();
+			continue;
+		}
+
+		// 输入坐标落子
+		//InputPoint(&spPoint);
 
 		// 设置坐标点状态
 		SetStatus(spPoint);

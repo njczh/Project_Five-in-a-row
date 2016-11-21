@@ -5,7 +5,7 @@
 #include <stdlib.h> 
 #include "game_service.h"
 
-#define OPTIONS 6
+#define OPTIONS 7						// 主菜单选项数量
 
 
 ///////////////////////////////////////////////////////
