@@ -5,6 +5,9 @@
 #define STATUS_BLACK 0		// black
 #define STATUS_WHITE 1		// white
 
+#define TRUE 1				// true
+#define FALSE 0				// false
+
 #define CHESS_BLANK "╋"	// 空格图标
 #define CHESS_BLACK "●"		// 黑子图标
 #define CHESS_WHITE "○"		// 白子图标

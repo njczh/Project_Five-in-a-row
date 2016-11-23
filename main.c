@@ -15,6 +15,10 @@
 int main(void)
 {
 	int nSelect;
+	
+	// 加载玩家排名
+	InitRanks();
+	
 	do
 	{
 		//输出欢迎界面
@@ -24,12 +28,11 @@ int main(void)
 
 		switch (nSelect)
 		{
-
+			
 		case 0:// 退出
 			continue;
 
 		case 1:// 多人模式
-			system("cls");
 			PlayGame();
 			break;
 
@@ -48,10 +51,7 @@ int main(void)
 			break;
 
 		case 4:// 排行榜
-			gotoxy(33, 25);
-			printf("分数排行\n");
-			gotoxy(24, 27);
-			system("pause");
+			PrintRanklist();
 			break;
 
 		case 5:// 查看规则

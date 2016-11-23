@@ -24,6 +24,12 @@
     <ClCompile Include="game_service.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="rank_service.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rank_file.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu.h">
@@ -36,6 +42,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="model.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rank_service.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rank_file.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

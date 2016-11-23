@@ -96,10 +96,20 @@ void InputPoint(Point* point)
 
 }
 
+void CoverTarget(const int nStatus)
+{
+	if (nStatus == STATUS_BLANK)
+		printf(CHESS_BLANK);
+	else if (nStatus == STATUS_BLACK)
+		printf(CHESS_BLACK);
+	else if (nStatus == STATUS_WHITE)
+		printf(CHESS_WHITE);
+}
+
 int InputCoord(Point *point)
 {
-	gotoxy(17, 24);
 	//以此标识，提示用户的输入
+	gotoxy(17, 24);
 	printf("==========================================\n");
 	if (point->status == STATUS_BLACK)
 	{
@@ -125,6 +135,7 @@ int InputCoord(Point *point)
 	point->row = 0;
 	
 	char key = 0;
+	int nStatus;
 
 	do
 	{
@@ -133,169 +144,114 @@ int InputCoord(Point *point)
 		coord.X = csbi.dwCursorPosition.X;// 得到坐标x的值
 		coord.Y = csbi.dwCursorPosition.Y;// 得到坐标y的值
 		
+		// 为了防止按两下回车确认
 		if (key != 13)
 			key = _getch();
 		
-		int nStatus = GetStatus(*point);
+		nStatus = GetStatus(*point);
 
 		switch (key)
 		{
 		
-		//up	 
+		// 点击键盘方向键向上	 
 		case 72:
 			if (coord.Y == 5)
 			{
 				point->row = MAX-1;
-				if (nStatus == STATUS_BLANK)
-					printf("╋");
-				else if (nStatus == STATUS_BLACK)
-					printf("●");
-				else if (nStatus == STATUS_WHITE)
-					printf("○");
+				CoverTarget(nStatus);
 				coord.Y = MAX + 4;
-				SetConsoleCursorPosition(hout, coord);
 			}
 			else
 			{
 				point->row--;
-				if (nStatus == STATUS_BLANK)
-					printf("╋");
-				else if (nStatus == STATUS_BLACK)
-					printf("●");
-				else if (nStatus == STATUS_WHITE)
-					printf("○");
+				CoverTarget(nStatus);
 				coord.Y--;
-				SetConsoleCursorPosition(hout, coord);
 			}
 			break;
 
-		//down
+		// 点击键盘方向键向下
 		case 80:
 			if (coord.Y == MAX + 4)
 			{
 				point->row = 0;
-				if (nStatus == STATUS_BLANK)
-					printf("╋");
-				else if (nStatus == STATUS_BLACK)
-					printf("●");
-				else if (nStatus == STATUS_WHITE)
-					printf("○");
+				CoverTarget(nStatus);
 				coord.Y = 5;
-				SetConsoleCursorPosition(hout, coord);
-			}
-				
+			}	
 			else
 			{
 				point->row++;
-				if (nStatus == STATUS_BLANK)
-					printf("╋");
-				else if (nStatus == STATUS_BLACK)
-					printf("●");
-				else if (nStatus == STATUS_WHITE)
-					printf("○");
+				CoverTarget(nStatus);
 				coord.Y++;
-				SetConsoleCursorPosition(hout, coord);
 			}
 			break;
 		
-		//left
+		// 点击键盘方向键向左
 		case 75:
 			if (coord.X == 22)
 			{
 				point->col = MAX - 1;
-				if (nStatus == STATUS_BLANK)
-					printf("╋\b\b");
-				else if (nStatus == STATUS_BLACK)
-					printf("●\b\b");
-				else if (nStatus == STATUS_WHITE)
-					printf("○\b\b");
+				CoverTarget(nStatus);
 				coord.X = 2 * MAX + 20;
-				SetConsoleCursorPosition(hout, coord);
 			}
 			else
 			{
 				point->col--;
-				if (nStatus == STATUS_BLANK)
-					printf("╋");
-				else if (nStatus == STATUS_BLACK)
-					printf("●");
-				else if (nStatus == STATUS_WHITE)
-					printf("○");
+				CoverTarget(nStatus);
 				coord.X -= 2;
-				SetConsoleCursorPosition(hout, coord);
 			}
 			break;
 		
-		//right
+		// 点击键盘方向键向右
 		case 77:
 			if (coord.X == 2 * MAX + 20)
 			{
 				point->col = 0;
-				if (nStatus == STATUS_BLANK)
-					printf("╋\b\b");
-				else if (nStatus == STATUS_BLACK)
-					printf("●\b\b");
-				else if (nStatus == STATUS_WHITE)
-					printf("○\b\b");
+				CoverTarget(nStatus);
 				coord.X = 22;
-				SetConsoleCursorPosition(hout, coord);
 			}
 			else
 			{
-				point->col ++;
-				coord.X += 2;
-				SetConsoleCursorPosition(hout, coord);
-				if (nStatus == STATUS_BLANK)
-					printf("\b\b╋");
-				else if (nStatus == STATUS_BLACK)
-					printf("\b\b●");
-				else if (nStatus == STATUS_WHITE)
-					printf("\b\b○");
+				point->col++;
+				CoverTarget(nStatus);
+				coord.X += 2;				
 			}
 			break;
 		
 		//回车确认
 		case 13:
-			
-			if (point->row < 0 || point->row>MAX - 1 || point->col < 0 || point->col >MAX - 1)
-			{
-				gotoxy(32, 26);
-				printf("【落子失败】");
-				gotoxy(26, 27);
-				printf("坐标不存在！请确认输入！\n");
-				SetConsoleCursorPosition(hout, coord);
-				continue;
-			}
+
 			//判断状态
-			if (GetStatus(*point) != STATUS_BLANK)		// 当状态不为空是，不可落子
+			if (nStatus!= STATUS_BLANK)		// 当状态不为空是，不可落子
 			{
 				// 当前位置已经存在棋子，提示用户
 				gotoxy(32, 26);
 				printf("【落子失败】");
 				gotoxy(26, 27);
-				printf("%02d行%c列已有棋子！不可落子！\n", point->col + 1, point->row + 'A');
+				printf("%02d行%c列已有棋子！不可落子！\n", point->row + 1, point->col + 'A');
 				SetConsoleCursorPosition(hout, coord);
 				key = _getch();
 				continue;
 			}
 			return 1;
 
+
 		default:
 			continue;
 			break;
 
 		}
-
-		if (point->status == STATUS_BLACK)
-			printf("●");
-		else if (point->status == STATUS_WHITE)
-			printf("○");
 		SetConsoleCursorPosition(hout, coord);
+		// 为当前坐标打印棋子
+		if (point->status == STATUS_BLACK)
+			printf("●\b");
+		else if (point->status == STATUS_WHITE)
+			printf("○\b");
 
 		key = _getch();
 
 	} while (key != 27);
 
+	// 判断是否退出
 	char running = 'N';
 	do
 	{
@@ -318,6 +274,8 @@ int InputCoord(Point *point)
 
 void PrintBound()
 {
+	// 此段代码并没有使用
+	// 输出游戏界面的边框
 	int i;
 	gotoxy(13, 2);
 	printf("╔");
@@ -341,8 +299,6 @@ void PrintBound()
 	}
 	gotoxy(75, 28);
 	printf("╝");
-	
-	
 }
 
 void PrintPrompt()
@@ -427,9 +383,9 @@ void PrintChess()
 
 	// 输出棋盘列号(下)
 	cA = 'A';
-	printf("\t\t       ");
+	printf("\t\t     ");
 	for (i = 0; i < MAX; i++)
-		printf("%C ", cA + i);
+		printf(" %C", cA + i);
 	printf("\n");
 }
 
@@ -656,8 +612,6 @@ void PrintWinner(const Point point)
 		gotoxy(28, 14);
 		printf("╚════════╝");
 	}
-	gotoxy(24, 24);
-	system("pause");
 }
 
 void PrintDraw()
