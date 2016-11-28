@@ -30,6 +30,9 @@
     <ClCompile Include="rank_file.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="game_file.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu.h">
@@ -50,5 +53,19 @@
     <ClInclude Include="rank_file.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="game_file.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ranklist.dat">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="Ranklist_Test.dat">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="gamesaver.dat">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

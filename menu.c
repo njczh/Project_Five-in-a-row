@@ -148,21 +148,30 @@ int printMainMenu()
 
 }
 
-void PlayGame()
+void PlayGame(int nSelect)
 {
 	Point spPoint;						// 坐标点
 	int nStep = 0;						// 下子的步数
 	int nResult = JUDGE_CONTINUE;		// 棋局判断结果
 
-	// 初始化游戏数据
-	InitStatus();
+	if (nSelect == 1)					
+	{
+		// 开始新游戏
+		// 初始化游戏数据
+		InitStatus();
+	}
+	else if (nSelect == 3)				
+	{
+		// 加载游戏
+		LoadGame(&nStep);
+	}
 
 	// 绘制棋盘
 	PrintChess();
 	//PrintBound();
 
 	// 输出开始提示
-	PrintPrompt();
+	PrintStartPrompt();
 
 	// 绘制棋盘
 	PrintChess();
@@ -181,6 +190,11 @@ void PlayGame()
 		case 1:			// 玩家正确落子
 			break;
 		case 0:			// 玩家选择退出游戏
+			if (PrintPrompt() == 0)
+			{
+				// 玩家是否保存游戏
+				SaveGame(nStep);
+			}				
 			return;
 			break;
 		case -1:		// 玩家退出选择否

@@ -5,7 +5,6 @@
 #include <conio.h>
 #include "menu.h"
 
-
 /****************************************************
 [函数名称] main
 [函数功能] 程序主函数，即入口函数
@@ -14,6 +13,7 @@
 ****************************************************/
 int main(void)
 {
+	// 玩家选项
 	int nSelect;
 	
 	// 加载玩家排名
@@ -23,7 +23,8 @@ int main(void)
 	{
 		//输出欢迎界面
 		intiApplication();
-
+		
+		// 通过方向键选择功能
 		nSelect = printMainMenu();
 
 		switch (nSelect)
@@ -33,7 +34,8 @@ int main(void)
 			continue;
 
 		case 1:// 多人模式
-			PlayGame();
+			//参数为选择游戏模式：加载还是新建
+			PlayGame(nSelect);			
 			break;
 
 		case 2:// 单人模式
@@ -44,10 +46,7 @@ int main(void)
 			break;
 
 		case 3:// 加载棋局 
-			gotoxy(33, 25);
-			printf("加载棋局\n");
-			gotoxy(24, 27);
-			system("pause");
+			PlayGame(nSelect);
 			break;
 
 		case 4:// 排行榜
@@ -63,12 +62,15 @@ int main(void)
 			break;
 
 		default:
-			printf("\t\t输入有误，请确认选项！");
+			printf("出bug啦！");
 		}
 
 	} while (nSelect != 0);
 
+	// 退出程序，并保存排名，输出退出界面
 	exitApplication();
-	return 0;// 如果返回0，则代表程序正常退出；
+	
+	// 如果返回0，则代表程序正常退出；
+	return 0;
 }
 

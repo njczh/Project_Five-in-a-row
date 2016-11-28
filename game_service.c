@@ -1,8 +1,7 @@
 #include "game_service.h"
 
-int AnChessStatus[MAX][MAX];
+int AChessStatus[MAX][MAX];
 HANDLE hout;
-
 
 void gotoxy(int x, int y)
 {
@@ -20,17 +19,17 @@ void InitStatus()
 	// 初始化状态值，使用双循环遍历二维数组
 	for (i = 0; i < MAX; i++)
 		for (j = 0; j < MAX; j++)
-			AnChessStatus[i][j] = STATUS_BLANK;
+			AChessStatus[i][j] = STATUS_BLANK;
 }
 
 int GetStatus(const Point point)
 {
-	return AnChessStatus[point.row][point.col];
+	return AChessStatus[point.row][point.col];
 }
 
 void SetStatus(const Point point)
 {
-	AnChessStatus[point.row][point.col] = point.status;
+	AChessStatus[point.row][point.col] = point.status;
 }
 
 void InputPoint(Point* point)
@@ -301,7 +300,30 @@ void PrintBound()
 	printf("╝");
 }
 
-void PrintPrompt()
+int PrintPrompt()
+{
+	// 判断是否保存
+	char ifSave = 'N';
+	do
+	{
+		gotoxy(28, 12);
+		printf("╔════════╗");
+		gotoxy(28, 13);
+		printf("║ 保存游戏(Y/N)? ║");
+		gotoxy(28, 14);
+		printf("╚════════╝");
+		gotoxy(1, 1);
+		ifSave = _getch();
+		ifSave = toupper(ifSave);	// 将字符转换为大写英文字母
+	} while (ifSave != 'Y' && ifSave != 'N');
+
+	if (ifSave == 'Y')
+		return 0;
+	else if (ifSave == 'N')
+		return -1;
+}
+
+void PrintStartPrompt()
 {
 	gotoxy(28, 12);
 	printf("╔════════╗");
@@ -394,7 +416,7 @@ int JudgeDraw()
 	int i, j;
 	for (i = 0; i < MAX; i++)
 		for (j = 0; j < MAX; j++)
-			if (AnChessStatus[i][j] == STATUS_BLANK)
+			if (AChessStatus[i][j] == STATUS_BLANK)
 				return FALSE;
 	return TRUE;
 	return 0;
@@ -407,7 +429,7 @@ int JudgeGame(Point point)
 	int nCount;	
 
 	// 获取落子的标准状态,用于判断
-	point.status = AnChessStatus[point.row][point.col];
+	point.status = AChessStatus[point.row][point.col];
 
 	// 横向判断
 	nCount = JudgeHorizontal(point);
@@ -449,7 +471,7 @@ int JudgeHorizontal(const Point point)
 	i = point.row-1;
 	while (i >= 0)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向上遍历，碰到同色计数器+1
 			i--;			// 继续向上遍历
@@ -462,7 +484,7 @@ int JudgeHorizontal(const Point point)
 	i = point.row + 1;
 	while (i < MAX)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向下遍历，碰到同色计数器+1
 			i++;			// 继续向下遍历
@@ -485,7 +507,7 @@ int JudgeVertical(const Point point)
 	j = point.col - 1;
 	while (j >= 0)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向左遍历，碰到同色计数器+1
 			j--;			// 继续向左遍历
@@ -498,7 +520,7 @@ int JudgeVertical(const Point point)
 	j = point.col + 1;
 	while (j < MAX)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向左遍历，碰到同色计数器+1
 			j++;			// 继续向右遍历
@@ -523,7 +545,7 @@ int JudgeHyperphoria(const Point point)
 	j = point.col + 1;
 	while (j < MAX&&i >= 0)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向左下遍历，碰到同色计数器+1
 			j++;			// 继续向左下遍历
@@ -538,7 +560,7 @@ int JudgeHyperphoria(const Point point)
 	j = point.col - 1;
 	while (j >= 0 && i < MAX)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向右上遍历，碰到同色计数器+1
 			i++;			// 继续向右上遍历
@@ -564,7 +586,7 @@ int JudgeHypophoria(const Point point)
 	j = point.col - 1;
 	while (j >= 0 && i >= 0)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向左上遍历，碰到同色计数器+1
 			j--;			// 继续向左上遍历
@@ -579,7 +601,7 @@ int JudgeHypophoria(const Point point)
 	j = point.col + 1;
 	while (i < MAX&&j < MAX)
 	{
-		if (AnChessStatus[i][j] == nStandard)
+		if (AChessStatus[i][j] == nStandard)
 		{
 			counter++;		// 落子点向右下遍历，碰到同色计数器+1
 			i++;			// 继续向右下遍历
@@ -626,3 +648,12 @@ void PrintDraw()
 	system("pause");
 }
 
+void SaveGame(int nStep)
+{
+	WriteGameInfo(nStep, AChessStatus);
+}
+
+void LoadGame(int *nStep)
+{
+	ReadGameInfo(nStep, AChessStatus);
+}

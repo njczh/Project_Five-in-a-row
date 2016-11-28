@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="game_file.c" />
     <ClCompile Include="game_service.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="menu.c" />
@@ -154,12 +155,18 @@
     <ClCompile Include="rank_service.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="game_file.h" />
     <ClInclude Include="game_service.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="rank_file.h" />
     <ClInclude Include="rank_service.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gamesaver.dat" />
+    <None Include="Ranklist.dat" />
+    <None Include="Ranklist_Test.dat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
