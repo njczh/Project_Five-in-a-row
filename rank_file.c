@@ -23,10 +23,8 @@ int WriteRanklist(Rank * psrRanks, const int nSize)
 	// 遍历Rank结构体数组，逐行显示
 	for (nIndex = 0; nIndex < nSize; nIndex++)
 	{
-		psrRanks = &psrRanks[nIndex];
-
 		// 写文件，字段之间使用“=>”分隔
-		fprintf(pfRanklist, "%s=>%d\n", psrRanks->name, psrRanks->step);
+		fprintf(pfRanklist, "%s=>%d\n", psrRanks[nIndex].name, psrRanks[nIndex].step);
 	}
 
 	// 关闭文件
@@ -44,7 +42,7 @@ int ReadRanklist(Rank* psrRanks, const int nMaxSize)
 	int err;
 
 	// 打开文件，fopen_s第一个参数为指向文件的指针名，第二个参数为文件名，第三个参数为打开方式
-	err = fopen_s(&pfRanklist, "Ranklist.dat", "r");
+	err = fopen_s(&pfRanklist, "Ranklist.dat", "rb");
 
 	// 打开文件出错
 	if (err != 0)
@@ -102,4 +100,32 @@ Rank ParseRank(char * pcBuf)
 	}
 
 	return srRank;
+}
+
+int GetRanklistCount()
+{
+	FILE *pfRanklist = NULL;
+	int nSize = 0;
+	int err = 0;
+
+	// 打开文件，fopen_s第一个参数为指向文件的指针名，第二个参数为文件名，第三个参数为打开方式
+	err = fopen_s(&pfRanklist, "Ranklist.dat", "rb");
+
+	// 打开文件出错
+	if (err != 0)
+	{
+		printf("文件打开失败！");
+		getchar();
+		return FALSE;
+	}
+
+	// 读取排名信息的个数
+	fscanf_s(pfRanklist, "TOTALCOUNT%d RANKLIST\n", &nSize);
+
+	// 关闭文件
+	fclose(pfRanklist);
+
+	// 返回数据个数 
+	return nSize;
+
 }

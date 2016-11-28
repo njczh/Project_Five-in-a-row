@@ -16,6 +16,9 @@ void exitApplication()
 	// 保存排名信息
 	SaveRanks();
 
+	// 释放链表空间
+	ClearRanks();
+
 	// 输出游戏结束提示信息
 	for (int i = 5; i != 0; i--)
 	{
@@ -186,7 +189,7 @@ void PlayGame()
 		}
 
 		// 通过输入坐标落子
-		//InputPoint(&spPoint);
+		// InputPoint(&spPoint);
 
 		// 设置坐标点状态
 		SetStatus(spPoint);

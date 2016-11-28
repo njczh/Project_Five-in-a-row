@@ -10,7 +10,7 @@ enum PointStatus
 	WHITE = 1		// white
 };
 
-// 坐标点数据
+// 定义坐标点数据
 typedef struct Point
 {
 	int row;				// 行号
@@ -18,11 +18,18 @@ typedef struct Point
 	int status;				// 当前点的状态值，取值对应PointStatus类型
 }Point;
 
-// 排名数据
+// 定义排名数据
 typedef struct Rank
 {
 	char name[64];			// 玩家ID
 	int step;				// 胜利时所用的步数
 }Rank;
+
+// 定义排名链表
+typedef struct Node
+{
+	Rank rank;
+	struct Node* next;
+}Node;
 
 #endif

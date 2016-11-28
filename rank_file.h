@@ -18,7 +18,7 @@ int ReadRanklist(Rank* psrRanks, const int nMaxSize);
 
 Rank ParseRank(char*);
 
+int GetRanklistCount();
+
 ///////////////////////////////////////////////////////
-
-
 #endif
